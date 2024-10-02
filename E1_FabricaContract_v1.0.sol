@@ -41,10 +41,25 @@ contract FabricaContract {
         propietarioProductos[msg.sender] += 1;
     }
 
+    /*function auxMatches(address _propietario) public view returns (uint) {
+        uint auxContador = 0;
+        uint matches = 0;
+
+        for (auxContador = 0; auxContador < productos.length; auxContador++) {
+            if (productoAPropietario[productos[auxContador].id] == _propietario) {
+                matches += 1;
+            }
+        }
+
+        return matches;
+        
+    }*/
+
     function getProductosPorPropietario(address _propietario) external view returns (uint[] memory) {
         uint contador = 0;
+        //uint matches = auxMatches(_propietario);
         uint matches = 0;
-        //uint[] memory resultado = new address[](productos.length);;
+        uint lastPos = 0;
 
         for (contador = 0; contador < productos.length; contador++) {
             if (productoAPropietario[productos[contador].id] == _propietario) {
@@ -52,12 +67,17 @@ contract FabricaContract {
             }
         }
 
+        //con longitud fija funciona
+        matches = 33;
+
         //Dynamic arrays are only available in storage, not in memory.
         //uint256
         uint[] memory resultado = new uint[](matches);
+        //uint[matches] memory resultado;
         for (contador = 0; contador < productos.length; contador++) {
             if (productoAPropietario[productos[contador].id] == _propietario) {
-                resultado[contador] = productos[contador].id;
+                resultado[lastPos] = productos[contador].id;
+                lastPos += 1;
             }
         }
         return resultado;

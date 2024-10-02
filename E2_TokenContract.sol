@@ -2,7 +2,7 @@
 pragma solidity ^0.8.18;
 
 contract TokenContract {
-    uint immutable tokenCost = 5;
+    uint immutable tokenPrice = 5000000000000000000;
 
     address public owner;
 
@@ -38,15 +38,24 @@ contract TokenContract {
     }
 
     //onlyOwner?
-    //Concurrencia
-    //Mensajes de error
-    //mala implementación de actualización de balances
-    function _buyToken(address _buyer, address _seller, uint256 _amount) public {
-        uint newBuyerBalance = 0;
-        uint newSellerBalance = 0;
+    //Concurrencia?
 
-        require(_buyer.balance >= _amount * tokenCost,"Not enough Ether.");
+    function _buyToken(address payable _seller, uint256 _amount) public payable {
+        //uint newBuyerBalance = 0;
+        //uint newSellerBalance = 0;
+
+        //"cantidad de Ether del contrato inteligente"
+
+        uint totalPrice = _amount * tokenPrice;
+
+        //require(msg.sender.balance >= totalPrice,"Not enough Ether.");
+        //Con >= el comprador puede pagar en exceso pero el vendedor no recibe el extra.
+        require(msg.value == totalPrice,"Wrong Ether value. Each token costs 5 Ether.");
         require(users[_seller].tokens >= _amount,"Seller doesn't own enough tokens.");
+
+        _seller.transfer(totalPrice);
+        users[_seller].tokens -= _amount;
+        users[msg.sender].tokens += _amount;
 
         //_buyer.balance...
         //users[_seller].tokens...
