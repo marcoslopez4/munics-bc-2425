@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Unlicenced
 pragma solidity ^0.8.10;
 
 contract FabricaContract {
@@ -35,20 +36,22 @@ contract FabricaContract {
     mapping (address => uint) propietarioProductos;
 
 
-    function Propiedad(uint _productoId) private {
+    function _Propiedad(uint _productoId) public {
         productoAPropietario[_productoId] = msg.sender;
-        propietarioProductos[msg.sender]++;
+        propietarioProductos[msg.sender] += 1;
     }
 
-    function getProductosPorPropietario(address _propietario) external view {
+    function getProductosPorPropietario(address _propietario) external view returns (uint[] memory) {
         uint contador = 0;
-        uint[] memory resultado;
+        uint lastPos = 0;
+        uint[] memory resultado = new uint[](propietarioProductos[_propietario]);
         for (contador = 0; contador < productos.length; contador++) {
-            producto = productos[contador];
-            if (productoAPropietario(producto.id) == _propietario) {
-                resultado.push(producto);
+            if (productoAPropietario[productos[contador].id] == _propietario) {
+                resultado[lastPos] = productos[contador].id;
+                lastPos += 1;
             }
         }
+        return resultado;
     }
 
 
