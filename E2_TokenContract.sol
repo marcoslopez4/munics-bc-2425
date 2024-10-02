@@ -44,7 +44,18 @@ contract TokenContract {
     function _buyToken(address _buyer, address _seller, uint256 _amount) public {
         uint newBuyerBalance = 0;
         uint newSellerBalance = 0;
-        if (_buyer.balance >= _amount * tokenCost && users[_seller].tokens >= _amount) {
+
+        require(_buyer.balance >= _amount * tokenCost,"Not enough Ether.");
+        require(users[_seller].tokens >= _amount,"Seller doesn't own enough tokens.");
+
+        //_buyer.balance...
+        //users[_seller].tokens...
+
+
+
+        /*if (_buyer.balance >= _amount * tokenCost && users[_seller].tokens >= _amount) {
+
+
             newBuyerBalance = _buyer.balance - _amount * tokenCost;
             _buyer.balance = newBuyerBalance;
             users[_buyer].tokens += _amount;
@@ -52,7 +63,7 @@ contract TokenContract {
             newSellerBalance = _seller.balance + _amount * tokenCost;
             _seller.balance = newSellerBalance;
             users[_seller].tokens -= _amount;
-        } //else if ()
+        } //else if ()*/
 
     }
 }
